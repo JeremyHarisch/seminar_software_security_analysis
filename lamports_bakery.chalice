@@ -1,0 +1,44 @@
+
+class Bakery {
+    var thread_id;                  // The id of the current thread.
+    var countToThis: int;      //
+    var numberOfThreads: int;
+    var count: int;
+    invariant acc(countToThis) && acc(numberOfThreads) && acc(count) && acc(thread_id)
+
+  method Bakery(id: int) {
+      thread_id := id
+  }
+  
+  method Main() {
+    call Init();
+     
+    fork t1 = bk1.run();
+    fork t1 = bk1.run();
+
+    join tk0; join tk1;
+    
+  }
+
+
+  method Init() 
+  ensures acc(bk1) && acc(bk2)
+  {
+    countToThis := 200;
+    numberOfThreads := 5;
+    count := 0;
+    
+    var bk1:= new Bakery(0);
+    var bk2:= new Bakery(1);
+  }
+
+  method run() 
+  requires acc(id)
+  ensures acc(id)
+  {
+
+  }
+  
+
+
+}
