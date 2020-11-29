@@ -1,7 +1,12 @@
+// Very simplistic implementation of Lamport´s Bakery algorithm
+// In here two threads are counting up to 200 together
+// Which menas they share the counter and lock each other up, using a lock and Chalice specific permissions
+
 
 class Bakery {
-    var thread_id: int;                  // The id of the current thread.
-    var countToThis: int;      //
+    var thread_id: int;
+    var choosing:int;
+    var countToThis: int; 
     var count: int;
     invariant acc(countToThis) && acc(count) && acc(thread_id)
 
@@ -26,21 +31,50 @@ class Bakery {
     
     var bk1:= new Bakery(0);
     var bk2:= new Bakery(1);
+    bk1.choosing := 0;
+    bk2.choosing := 0;
   }
 
   method run() 
-  requires acc(id)
-  ensures acc(id)
+  requires acc(thread_id)
+  ensures acc(thread_id)
   {
       while (count <= countToThis) {
-          call countUp();
+          call countUp(thread_id);
       }
   }
 
   method countUp() 
   requires acc(count)
   ensoures acc(count){
-      count := count+1;
+      lock(thread_id);
+        count := count+1;
+      lock(thread_id);
   }
   
+  method lock(id: int) 
+  {
+      if (id == 0) {
+          bk1.choosing := 1;
+          while (bk2.choosing == 1) {
+
+          }
+      }
+      else {
+          bk2.choosing := 1;
+          while (bk1.choosing == 1) {
+              
+          }
+      }
+  }
+
+  method unlock(id: int) 
+  {
+      if (id == 0) {
+          bk1.choosing := 0;
+      }
+      else {
+          bk2.choosing := 0;
+      }
+  }
 }
