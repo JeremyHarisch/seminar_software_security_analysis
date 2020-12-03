@@ -4,7 +4,7 @@ public class Bakery extends Thread {
 
 	public int id;
 	public static final int countGoal = 500;
-	public static final int numberOfThreads = 5;
+	public static final int numberOfThreads = 2;
 	public static volatile int count = 0;
 
 	private static volatile boolean[] choosing = new boolean[numberOfThreads];
@@ -25,7 +25,7 @@ public class Bakery extends Thread {
 			// Critical-Section-Start
 			count = count + 1;
 			System.out.println("Thread-ID: " + id + " Count: " + count);
-
+			// To create a realstic time buffer, since trade section is empty
 			try {
 				sleep((int) (Math.random() * scale));
 			} catch (InterruptedException e) {}
@@ -48,7 +48,7 @@ public class Bakery extends Thread {
 			if (j == id)
 				continue;
 
-			while (choosing[j]) { } // Waiting until other thread stops traiding
+			while (choosing[j]) { } // Waiting until other thread stops fethcing new ticket
 			while (ticket[j] != 0 && (ticket[id] > ticket[j] || (ticket[id] == ticket[j] && id > j))) { } // Waiting for other thread to choose a new ticket						 
 		} 
 	}
