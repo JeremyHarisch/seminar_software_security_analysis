@@ -1,0 +1,24 @@
+$\textbf{Thread A:}$
+$A_0$:  for (int i = 0; i < countGoal; i++) {
+$A_1$:      choosing[A] = true;
+$A_2$:      tmp1 = ticket[B];
+$A_3$:      ticket[A] = tmp1 + 1;
+$A_4$:      choosing[A] = false;
+$A_5$:      while choosing[B] { };
+$A_6$:      while ticket[B] = 0 or ticket[B] ≥ ticket[A] { }
+$A_7$:      // critical section
+$A_8$:      n1 = 0;
+$A_9$:      count = count + 1;
+$A_{10}$:      ticket[A] = 0; }
+$\textbf{Thread B:}$
+$B_0$:  for (int i = 0; i < countGoal; i++) {
+$B_1$:      choosing[B] = true;
+$B_2$:      tmp1 = ticket[A];
+$B_3$:      ticket[B] = tmp1 + 1;
+$B_4$:      choosing[B] = false;
+$B_5$:      while choosing[A] { };
+$B_6$:      while ticket[A] = 0 or ticket[A] ≥ ticket[B] { }
+$B_7$:      // critical section
+$B_8$:      n1 = 0;
+$B_9$:      count = count + 1;
+$B_{10}$:      ticket[B] = 0; }
